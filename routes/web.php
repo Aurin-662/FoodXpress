@@ -3,9 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+route::get('/',[HomeController::class, 'my_home']);
 
 route::get('/home', [HomeController::class, 'index']);
 
