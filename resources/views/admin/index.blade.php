@@ -1,13 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-<h1>Hello admin</h1>
+<html>
+  <head> 
+  
+    @include('admin.css')
 
-</body>
+  </head>
+  <body>
+    
+    @include('admin.header')
+
+    @include('admin.sidebar')
+    
+
+      <div class="page-content">
+        <div class="page-header">
+          <div class="container-fluid">
+            
+            @include('admin.body')
+
+          </div>
+      </div>
+    </div>
+    <!-- JavaScript files-->
+    @include('admin.js')
+  </body>
 </html>
