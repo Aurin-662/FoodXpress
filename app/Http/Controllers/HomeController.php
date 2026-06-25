@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 
 use App\Models\Food;
+use App\Models\Cart;
 
 
 use Illuminate\Support\Facades\Auth;
@@ -37,6 +38,35 @@ class HomeController extends Controller
             {
                 return view('admin.index');
             }
+        }
+    }
+
+    public function add_cart(Request $request, $id)
+    {
+        if(Auth::id())
+        {
+            
+            $food = Food::find($id);
+
+            $cart_title = $food->title;
+            $cart_details = $food->details;
+            $cart_price = $food->price;
+            $cart_image = $food->image;
+
+            $data = new Cart;
+            $data->title = $cart_title;
+            $data->details = $cart_details;
+            $data->price = $cart_price;
+            $data->image = $cart_image;
+            $data->quantity = $request->qty;
+            
+            $data->save();
+
+            return redirect()->back();
+        }
+        else
+        {
+            return redirect('login');
         }
     }
 }
