@@ -10,6 +10,9 @@ route::get('/home', [HomeController::class, 'index']);
 
 route::get('/add_food', [AdminController::class, 'add_food']);
 
+route::post('/upload_food', [AdminController::class, 'upload_food']);
+
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
