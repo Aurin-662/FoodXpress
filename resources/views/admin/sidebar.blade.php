@@ -16,7 +16,7 @@
                 <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-windows"></i>Food </a>
                   <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
                     <li><a href="{{url('add_food')}}">Add Food</a></li>
-                    <li><a href="#">View Food</a></li>
+                    <li><a href="{{url('view_food')}}">View Food</a></li>
                 
                   </ul>
                 </li>

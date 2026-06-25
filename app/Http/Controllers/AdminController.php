@@ -34,4 +34,10 @@ class AdminController extends Controller
 
 
     }
+
+    public function view_food()
+    {
+     
+        return view('admin.show_food');
+    }
 }
