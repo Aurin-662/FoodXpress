@@ -14,6 +14,8 @@ route::post('/upload_food', [AdminController::class, 'upload_food']);
 
 route::get('/view_food', [AdminController::class, 'view_food']);
 
+route::get('/delete_food/{id}', [AdminController::class, 'delete_food']);
+
 
 Route::middleware([
     'auth:sanctum',
