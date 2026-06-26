@@ -19,6 +19,22 @@
         color: white;
         padding: 10px;
     }
+    .div_center{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 50px;
+        
+    }
+    label{
+        display: inline-block;
+        width: 200px;
+        color: white;
+    }
+    .div_deg{
+        padding: 20px;
+    }
+
 
 
 </style>
@@ -125,6 +141,43 @@
         </table>
         <h3><b>Total Price: ${{$total_price}}</b></h3>
         
+
+
+    </div>
+
+    <div class="div_center">
+
+        <form action="{{url('confirm_order')}}" method="POST">
+        @csrf
+        <div class="div_deg">
+            <label for="">Name</label>
+            <input type="text" name="name" value="{{ Auth::user()->name }}" required>
+        </div>
+
+        <div class="div_deg">
+            <label for="">Email</label>
+            <input type="email" name="email" value="{{ Auth::user()->email }}" required>
+        </div>
+
+        <div class="div_deg">
+            <label for="">Phone</label>
+            <input type="number" name="phone" value="{{ Auth::user()->phone }}" required>
+        </div>
+        <div class="div_deg">
+            <label for="">Address</label>
+            <input type="text" name="address" value="{{ Auth::user()->address }}" required>
+        </div>
+
+        <div class="div_deg">
+           
+            <input type="submit" value="Confirm Order" class="btn btn-info">
+        </div>
+
+
+
+
+        </form>
+
 
 
     </div>
