@@ -30,7 +30,9 @@ route::post('/confirm_order', [HomeController::class, 'confirm_order']);
 
 
 route::get('/orders', [AdminController::class, 'orders']);
-
+route::get('/on_the_way/{id}', [AdminController::class, 'on_the_way']);
+route::get('/delivered/{id}', [AdminController::class, 'delivered']);
+route::get('/canceled/{id}', [AdminController::class, 'canceled']);
 
 Route::middleware([
     'auth:sanctum',
