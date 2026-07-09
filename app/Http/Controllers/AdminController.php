@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Food;
 
 use App\Models\order;
+use App\Models\Book;
 
 class AdminController extends Controller
 {
@@ -107,6 +108,12 @@ class AdminController extends Controller
         $data->save();
 
         return redirect()->back();
+    }
+
+    public function reservations()
+    {
+        $book = Book::all();
+        return view('admin.reservation', compact('book'));
     }
 
 
