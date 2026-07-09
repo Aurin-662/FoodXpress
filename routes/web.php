@@ -34,6 +34,10 @@ route::get('/on_the_way/{id}', [AdminController::class, 'on_the_way']);
 route::get('/delivered/{id}', [AdminController::class, 'delivered']);
 route::get('/canceled/{id}', [AdminController::class, 'canceled']);
 
+route::post('/book_table', [HomeController::class, 'book_table']);
+
+
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
