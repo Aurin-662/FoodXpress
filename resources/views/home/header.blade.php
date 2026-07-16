@@ -57,6 +57,7 @@
             </ul>
         </div>
     </nav>
+    <x-flash-message />
     <!-- header -->
     <header id="home" class="header">
         <div class="overlay text-white text-center">

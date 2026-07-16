@@ -33,6 +33,10 @@
                 @livewire('profile.logout-other-browser-sessions-form')
             </div>
 
+            <div class="mt-6 sm:mt-4">
+                <a href="{{ url('/forget-phone') }}" class="text-sm text-red-600 hover:underline">Forget my phone number</a>
+            </div>
+
             @if (Laravel\Jetstream\Jetstream::hasAccountDeletionFeatures())
                 <x-section-border />
 

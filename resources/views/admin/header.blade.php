@@ -33,4 +33,5 @@
           </div>
         </div>
       </nav>
+      <x-flash-message />
     </header>

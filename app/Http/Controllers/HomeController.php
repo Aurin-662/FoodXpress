@@ -169,7 +169,7 @@ class HomeController extends Controller
 
         $data->save();
 
-        return redirect()->back()->with('success', 'Table booked successfully!');
+        return redirect()->back()->with('success', 'Table booked successfully!')->withCookie(cookie('last_phone', $request->phone, 60 * 24 * 30));
     }
 
 

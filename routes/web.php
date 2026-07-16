@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Cookie;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 
@@ -8,6 +9,11 @@ use App\Http\Controllers\AdminController;
 Route::get('/', [HomeController::class, 'my_home']);
 Route::get('/home', [HomeController::class, 'index']);
 Route::post('/book_table', [HomeController::class, 'book_table']);
+
+// Forget stored phone cookie
+Route::get('/forget-phone', function () {
+    return redirect()->back()->withCookie(Cookie::forget('last_phone'));
+});
 
 // ---------- Logged-in user routes (cart, order) ----------
 Route::middleware(['loggedin'])->group(function () {
