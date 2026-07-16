@@ -4,40 +4,34 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 
-route::get('/',[HomeController::class, 'my_home']);
+// ---------- Public routes ----------
+Route::get('/', [HomeController::class, 'my_home']);
+Route::get('/home', [HomeController::class, 'index']);
+Route::post('/book_table', [HomeController::class, 'book_table']);
 
-route::get('/home', [HomeController::class, 'index']);
+// ---------- Logged-in user routes (cart, order) ----------
+Route::middleware(['loggedin'])->group(function () {
+    Route::post('/add_cart/{id}', [HomeController::class, 'add_cart']);
+    Route::get('/my_cart', [HomeController::class, 'my_cart']);
+    Route::get('/remove_cart/{id}', [HomeController::class, 'remove_cart']);
+    Route::post('/confirm_order', [HomeController::class, 'confirm_order']);
+});
 
-route::get('/add_food', [AdminController::class, 'add_food']);
+// ---------- Admin-only routes ----------
+Route::middleware(['loggedin', 'admin'])->group(function () {
+    Route::get('/add_food', [AdminController::class, 'add_food']);
+    Route::post('/upload_food', [AdminController::class, 'upload_food']);
+    Route::get('/view_food', [AdminController::class, 'view_food']);
+    Route::get('/delete_food/{id}', [AdminController::class, 'delete_food']);
+    Route::get('/update_food/{id}', [AdminController::class, 'update_food']);
+    Route::post('/edit_food/{id}', [AdminController::class, 'edit_food']);
 
-route::post('/upload_food', [AdminController::class, 'upload_food']);
-
-route::get('/view_food', [AdminController::class, 'view_food']);
-
-route::get('/delete_food/{id}', [AdminController::class, 'delete_food']);
-
-route::get('/update_food/{id}', [AdminController::class, 'update_food']);
-
-route::post('/edit_food/{id}', [AdminController::class, 'edit_food']);
-
-route::post('/add_cart/{id}', [HomeController::class, 'add_cart']);
-
-route::get('/my_cart', [HomeController::class, 'my_cart']);
-
-route::get('/remove_cart/{id}', [HomeController::class, 'remove_cart']);
-
-route::post('/confirm_order', [HomeController::class, 'confirm_order']);
-
-
-route::get('/orders', [AdminController::class, 'orders']);
-route::get('/on_the_way/{id}', [AdminController::class, 'on_the_way']);
-route::get('/delivered/{id}', [AdminController::class, 'delivered']);
-route::get('/canceled/{id}', [AdminController::class, 'canceled']);
-
-route::post('/book_table', [HomeController::class, 'book_table']);
-
-route::get('/reservations', [AdminController::class, 'reservations']);
-
+    Route::get('/orders', [AdminController::class, 'orders']);
+    Route::get('/on_the_way/{id}', [AdminController::class, 'on_the_way']);
+    Route::get('/delivered/{id}', [AdminController::class, 'delivered']);
+    Route::get('/canceled/{id}', [AdminController::class, 'canceled']);
+    Route::get('/reservations', [AdminController::class, 'reservations']);
+});
 
 Route::middleware([
     'auth:sanctum',
