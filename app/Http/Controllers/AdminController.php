@@ -17,26 +17,29 @@ class AdminController extends Controller
     }
     
     public function upload_food(Request $request)
-    {
-        $data = new Food;
-        
-        $data->title = $request->title;
-        $data->detail = $request->details;
-        $data->price = $request->price;
+{
+    $request->validate([
+        'title'   => 'required|string|max:255',
+        'details' => 'required|string',
+        'price'   => 'required|numeric|min:0',
+        'img'     => 'required|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        $image = $request->img;
-        $filename = time().'.'.$image->getClientOriginalExtension();
-        $request->img->move('food_img', $filename);
+    $data = new Food;
+    $data->title = $request->title;
+    $data->detail = $request->details;
+    $data->price = $request->price;
 
-        $data->image = $filename;
+    $image = $request->img;
+    $filename = time().'.'.$image->getClientOriginalExtension();
+    $request->img->move('food_img', $filename);
+    $data->image = $filename;
+    $data->save();
+
+    return redirect()->back()->with('success', 'Food item added successfully!');
+}
 
 
-        $data->save();
-
-        return redirect()->back();
-
-
-    }
 
     public function view_food()
     {
@@ -55,27 +58,34 @@ class AdminController extends Controller
         return view('admin.update_food', compact('food'));
     }
 
-    public function edit_food(Request $request, $id)
-    {
-        $data = Food::find($id);
-        $data->title = $request->title;
-        $data->detail = $request->details;
-        $data->price = $request->price;
-
-        $image = $request->image;
-        if($image)
-            {
-                $imagename = time().'.'.$image->getClientOriginalExtension();
-                $request->image->move('food_img', $imagename);
-                $data->image = $imagename;
-            }
-
-        $data->save();
-        
-        return redirect('view_food');
 
 
+   public function edit_food(Request $request, $id)
+{
+    $request->validate([
+        'title'   => 'required|string|max:255',
+        'details' => 'required|string',
+        'price'   => 'required|numeric|min:0',
+        'image'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+    $data = Food::find($id);
+    $data->title = $request->title;
+    $data->detail = $request->details;
+    $data->price = $request->price;
+
+    if ($request->image) {
+        $imagename = time().'.'.$request->image->getClientOriginalExtension();
+        $request->image->move('food_img', $imagename);
+        $data->image = $imagename;
     }
+    $data->save();
+
+    return redirect('view_food')->with('success', 'Food item updated!');
+}
+
+
+
 
     public function orders()
     {

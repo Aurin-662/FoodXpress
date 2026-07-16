@@ -104,6 +104,7 @@
 
     <div id="gallary" class="text-center bg-dark text-light has-height-md middle-items wow fadeIn">
 
+        @if($data->count() > 0)
         <table>
             <tr>
 
@@ -114,33 +115,29 @@
                 <th>Remove</th>
             </tr>
 
-            <?php
-             $total_price = 0;
-             ?>
-
-
-         @foreach($data as $data)
+         @foreach($data as $item)
             <tr>
              
-                <td>{{$data->title}}</td>
-                <td>${{$data->price}}</td>
-                <td>{{$data->quantity}}</td>
+                <td>{{$item->title}}</td>
+                <td>${{$item->price}}</td>
+                <td>{{$item->quantity}}</td>
                 <td>
-                    <img width="150" src="food_img/{{$data->image}}" alt="">
+                    <img width="150" src="food_img/{{$item->image}}" alt="">
                 </td>
                 <td>
-                    <a class="btn btn-danger" onclick="return confirm('Are you sure to remove this item from cart?')" href="{{ url('remove_cart', $data->id) }}">Delete</a>
+                    <a class="btn btn-danger" onclick="return confirm('Are you sure to remove this item from cart?')" href="{{ url('remove_cart', $item->id) }}">Delete</a>
                 </td>
             </tr>
-
-            <?php
-             $total_price = $total_price + $data->price;
-             ?>
         @endforeach
 
         </table>
-        <h3><b>Total Price: ${{$total_price}}</b></h3>
+        <h3><b>Total Price: ${{ $data->sum('price') }}</b></h3>
         
+        @else
+        <h2 style="color: white; padding: 40px;">Your cart is empty!</h2>
+        @endif
+
+    </div>
 
 
     </div>
@@ -149,6 +146,18 @@
 
         <form action="{{url('confirm_order')}}" method="POST">
         @csrf
+
+        @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+
         <div class="div_deg">
             <label for="">Name</label>
             <input type="text" name="name" value="{{ Auth::user()->name }}" required>
@@ -161,11 +170,11 @@
 
         <div class="div_deg">
             <label for="">Phone</label>
-            <input type="number" name="phone" value="{{ Auth::user()->phone }}" required>
+            <input type="number" name="phone" value="{{ Auth::user()->phone ?? '' }}">
         </div>
         <div class="div_deg">
             <label for="">Address</label>
-            <input type="text" name="address" value="{{ Auth::user()->address }}" required>
+            <input type="text" name="address" value="{{ Auth::user()->address ?? '' }}">
         </div>
 
         <div class="div_deg">

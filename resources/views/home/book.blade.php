@@ -1,10 +1,26 @@
 <div class="container-fluid has-bg-overlay text-center text-light has-height-lg middle-items" id="book-table">
-        <div class="">
-            <h2 class="section-title mb-5">BOOK A TABLE</h2>
+    <div class="">
+        <h2 class="section-title mb-5">BOOK A TABLE</h2>
 
-            <form action="{{url('book_table')}}" method="POST">
-                @csrf
+        <form action="{{url('book_table')}}" method="POST">
+            @csrf
+
            
+            @if ($errors->book_table->any())
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-8">
+                    <div class="alert alert-danger" style="border-radius: 8px; text-align: left;">
+                        <ul class="mb-0" style="padding-left: 1.2rem;">
+                            @foreach ($errors->book_table->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+
             <div class="row mb-5">
                 <div class="col-sm-6 col-md-3 col-xs-12 my-2">
                     <input type="text" id="booktable" class="form-control form-control-lg custom-form-control" name="phone" placeholder="Phone Number">
@@ -20,6 +36,6 @@
                 </div>
             </div>
             <input type="submit" class="btn btn-lg btn-primary" id="rounded-btn" value="Book Table">
-             </form>
-        </div>
+        </form>
     </div>
+</div>

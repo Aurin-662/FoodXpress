@@ -32,7 +32,7 @@ class HomeController extends Controller
     {
         if(Auth::id())
         {
-            $usertype = Auth()->user()->usertype;
+            $usertype = Auth::user()->usertype;
             if($usertype=='user')
             {
                 $data = Food::all();  
@@ -51,39 +51,45 @@ class HomeController extends Controller
         }
     }
 
+    
+    
     public function add_cart(Request $request, $id)
+{
+    $request->validateWithBag('add_cart', [
+        'qty' => 'required|integer|min:1|max:20',
+    ]);
+
+    if (Auth::id())
     {
-        if(Auth::id())
-        {
-            
-            $food = Food::find($id);
+        $food = Food::find($id);
 
-            $cart_title = $food->title;
-            $cart_details = $food->details;
-            $cart_price = Str::remove('$', $food->price);
-            $cart_image = $food->image;
+        $cart_title = $food->title;
+        $cart_details = $food->details;
+        $cart_price = Str::remove('$', $food->price);
+        $cart_image = $food->image;
 
-            $data = new Cart;
-            $data->title = $cart_title;
-            $data->details = $cart_details;
-            $data->price = $cart_price * $request->qty;
-            $data->image = $cart_image;
-            $data->quantity = $request->qty;
-            $data->userid = Auth()->user()->id;
-            
-            $data->save();
+        $data = new Cart;
+        $data->title = $cart_title;
+        $data->details = $cart_details;
+        $data->price = $cart_price * $request->qty;
+        $data->image = $cart_image;
+        $data->quantity = $request->qty;
+        $data->userid = Auth::user()->id;
 
-            return redirect()->back();
-        }
-        else
-        {
-            return redirect('login');
-        }
+        $data->save();
+
+        return redirect()->back()->with('success', 'Added to cart!');
     }
+    else
+    {
+        return redirect('login');
+    }
+}
+
 
     public function my_cart()
     {
-        $user_id = Auth()->user()->id;
+        $user_id = Auth::user()->id;
 
         $data = Cart::where('userid','=',$user_id)->get();
 
@@ -99,7 +105,16 @@ class HomeController extends Controller
 
     public function confirm_order(Request $request)
     {
-        $user_id = Auth()->user()->id;
+
+        $request->validate([
+        'name'    => 'required|string|max:255',
+        'email'   => 'required|email',
+        'phone'   => 'nullable|string|min:6',
+        'address' => 'nullable|string|max:500',
+    ]);
+
+
+        $user_id = Auth::user()->id;
 
         
         $cart = Cart::where('userid','=',$user_id)->get();
@@ -130,12 +145,21 @@ class HomeController extends Controller
            
         }
 
-        return redirect()->back();
+           return redirect()->back()->with('success', 'Order placed successfully!');
     }
 
 
     public function book_table(Request $request)
     {
+
+        $request->validateWithBag('book_table', [
+        'phone'   => 'required|string|min:6',
+        'n_guest' => 'required|integer|min:1|max:20',
+        'date'    => 'required|date|after_or_equal:today',
+        'time'    => 'required',
+    ]);
+
+
         $data = new Book;
 
         $data->phone = $request->phone;
@@ -145,7 +169,7 @@ class HomeController extends Controller
 
         $data->save();
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Table booked successfully!');
     }
 
 

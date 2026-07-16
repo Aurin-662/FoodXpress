@@ -31,6 +31,19 @@
             <h1>Update Food</h1>
             <form action="{{url('edit_food', $food->id)}}" method="POST" enctype="multipart/form-data">
             @csrf
+
+
+            @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+
                 <div class="div_deg">
                     <label for="">Food title</label>
                     <input type="text" name="title" value="{{$food->title}}" >

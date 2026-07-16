@@ -34,8 +34,7 @@
         </div>
     </div>
     <div class="bg-dark text-light text-center border-top wow fadeIn">
-        <p class="mb-0 py-3 text-muted small">&copy; Copyright <script>document.write(new Date().getFullYear())</script> Made with <i class="ti-heart text-danger"></i> By <a href="http://devcrud.com">DevCRUD</a></p>
-    </div>
+<p class="mb-0 py-3 text-muted small">&copy; Copyright <script>document.write(new Date().getFullYear())</script> FoodXpress. All rights reserved.</p>    </div>
     <!-- end of page footer -->
 
 	<!-- core  -->
