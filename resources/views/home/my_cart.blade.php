@@ -42,7 +42,7 @@
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
     
-        <nav class="custom-navbar navbar navbar-expand-lg navbar-dark fixed-top" data-spy="affix" data-offset-top="10">
+    <nav class="custom-navbar navbar navbar-expand-lg navbar-dark fixed-top" data-spy="affix" data-offset-top="10">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -102,7 +102,20 @@
     </nav>
 </br></br></br>
 
+
+
     <div id="gallary" class="text-center bg-dark text-light has-height-md middle-items wow fadeIn">
+
+
+    @if(session('success'))
+    </br></br></br>
+        <div class="alert alert-success text-center" style="margin: 0 40px; border-radius: 8px;">{{ session('success') }}</div>
+    @endif
+    @if(session('error'))
+    </br></br></br>
+        <div class="alert alert-danger text-center" style="margin: 0 40px; border-radius: 8px;">{{ session('error') }}</div>
+    @endif
+
 
         @if($data->count() > 0)
         <table>
@@ -177,10 +190,29 @@
             <input type="text" name="address" value="{{ Auth::user()->address ?? '' }}">
         </div>
 
+
+
+        <div class="div_deg">
+            <label for="">Delivery City</label>
+            <select name="delivery_city" required style="padding:8px; border-radius:5px; width: 250px;">
+                <option value="">-- Select city --</option>
+                @foreach(['Dhaka','Chittagong','Khulna','Rajshahi','Sylhet','Barisal','Rangpur','Mymensingh'] as $cityOption)
+                    <option value="{{ $cityOption }}" {{ old('delivery_city', $detectedCity) == $cityOption ? 'selected' : '' }}>
+                        {{ $cityOption }}
+                    </option>
+                @endforeach
+            </select>
+            @if($detectedCity)
+                <br><small style="color:#ccc;">Detected your location as {{ $detectedCity }} — change it if ordering delivery to a different city.</small>
+            @endif
+        </div>
+
+
         <div class="div_deg">
            
             <input type="submit" value="Confirm Order" class="btn btn-info">
         </div>
+
 
 
 

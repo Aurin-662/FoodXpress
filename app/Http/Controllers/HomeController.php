@@ -93,13 +93,13 @@ class HomeController extends Controller
 
 
     public function my_cart()
-    {
-        $user_id = Auth::user()->id;
+{
+    $user_id = Auth()->user()->id;
+    $data = Cart::where('userid','=',$user_id)->get();
+    $detectedCity = $this->getDeliveryCity();
 
-        $data = Cart::where('userid','=',$user_id)->get();
-
-        return view('home.my_cart', compact('data'));
-    }
+    return view('home.my_cart', compact('data', 'detectedCity'));
+}
 
     public function remove_cart($id)
     {
@@ -116,6 +116,7 @@ class HomeController extends Controller
         'email'   => 'required|email',
         'phone'   => 'nullable|string|min:6',
         'address' => 'nullable|string|max:500',
+        'delivery_city' => 'required|string',
     ]);
 
 
@@ -179,17 +180,18 @@ class HomeController extends Controller
 
 
 
-    public function getDeliveryCity(Request $request)
-    {
-        try {
-            $client = new Client();
-            $response = $client->get('http://ip-api.com/json');
-            $data = json_decode($response->getBody(), true);
-            return $data['city'] ?? 'Unknown';
-        } catch (\Exception $e) {
-            return 'Unknown';
-        }
+    public function getDeliveryCity()
+{
+    try {
+        $client = new \GuzzleHttp\Client();
+        $response = $client->get('http://ip-api.com/json');
+        $data = json_decode($response->getBody(), true);
+        return $data['city'] ?? null;
+    } catch (\Exception $e) {
+        return null;
     }
+}
+
 
 
 
