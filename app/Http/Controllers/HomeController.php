@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+
+
 use App\Models\User;
 
 use App\Models\Food;
@@ -14,6 +16,7 @@ use App\Models\Book;
 
 
 use Illuminate\Support\Facades\Auth;
+use GuzzleHttp\Client;
 use Illuminate\Support\Str;
 
 class HomeController extends Controller
@@ -23,8 +26,9 @@ class HomeController extends Controller
     {
 
         $data = Food::all();    
+        $city = $this->getDeliveryCity(request());
     
-        return view('home.index', compact('data'));
+        return view('home.index', compact('data','city'));
     }
 
 
@@ -36,7 +40,8 @@ class HomeController extends Controller
             if($usertype=='user')
             {
                 $data = Food::all();  
-                return view('home.index', compact('data'));
+                $city = $this->getDeliveryCity(request());
+                return view('home.index', compact('data', 'city'));
             }
             else
             {
@@ -171,6 +176,21 @@ class HomeController extends Controller
 
         return redirect()->back()->with('success', 'Table booked successfully!')->withCookie(cookie('last_phone', $request->phone, 60 * 24 * 30));
     }
+
+
+
+    public function getDeliveryCity(Request $request)
+    {
+        try {
+            $client = new Client();
+            $response = $client->get('http://ip-api.com/json');
+            $data = json_decode($response->getBody(), true);
+            return $data['city'] ?? 'Unknown';
+        } catch (\Exception $e) {
+            return 'Unknown';
+        }
+    }
+
 
 
 }

@@ -16,6 +16,8 @@
     <!-- book a table Section  -->
     @include('home.book')
     <!-- BLOG Section  -->
+     <p>Delivering to: {{ $city }}</p>
+
     @include('home.blog')
 
 

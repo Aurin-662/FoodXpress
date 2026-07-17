@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
         'admin'    => \App\Http\Middleware\AdminMiddleware::class,
         'loggedin' => \App\Http\Middleware\EnsureUserRole::class,
+        'delivery' => \App\Http\Middleware\DeliveryAreaMiddleware::class,
     ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
