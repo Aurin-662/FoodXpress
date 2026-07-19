@@ -18,6 +18,8 @@ Route::get('/forget-phone', function () {
 // ---------- Logged-in user routes (cart, order) ----------
 Route::middleware(['loggedin'])->group(function () {
     Route::post('/add_cart/{id}', [HomeController::class, 'add_cart']);
+    Route::post('/update_cart/{id}', [HomeController::class, 'update_cart']);
+    Route::post('/add_review/{foodId}', [HomeController::class, 'add_review']);
     Route::get('/my_cart', [HomeController::class, 'my_cart']);
     Route::get('/remove_cart/{id}', [HomeController::class, 'remove_cart']);
 //  Route::post('/confirm_order', [HomeController::class, 'confirm_order']);
@@ -41,10 +43,16 @@ Route::middleware(['loggedin', 'admin'])->group(function () {
     Route::get('/delivered/{id}', [AdminController::class, 'delivered']);
     Route::get('/canceled/{id}', [AdminController::class, 'canceled']);
     Route::get('/reservations', [AdminController::class, 'reservations']);
+    Route::get('/reviews', [AdminController::class, 'reviews']);
 
     Route::get('/admin_dashboard', [AdminController::class, 'dashboard']);
 
     Route::get('/sales_report', [AdminController::class, 'salesReport']);
+
+
+    Route::get('/categories', [AdminController::class, 'categories']);
+    Route::post('/add_category', [AdminController::class, 'addCategory']);
+    Route::get('/delete_category/{id}', [AdminController::class, 'deleteCategory']);
 });
 
 Route::middleware([

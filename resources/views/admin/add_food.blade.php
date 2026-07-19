@@ -62,6 +62,17 @@
                 </div>
 
                 <div class="div_deg">
+    <label for="">Category</label>
+    <select name="category_id" required>
+        <option value="">Select Category</option>
+        @foreach($topCategories as $top)
+            <option value="{{ $top->id }}">{{ $top->name }}</option>
+        @endforeach
+    </select>
+    <small class="text-light d-block mt-2">Choose one of the main categories: Value Meal, Drinks, or Desserts.</small>
+</div>
+
+                <div class="div_deg">
                     <label for="">Image</label>
                     <input type="file" name="img" required>
 

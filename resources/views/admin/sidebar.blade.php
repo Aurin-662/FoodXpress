@@ -33,7 +33,9 @@
                   class="icon-logout"></i>Reservations 
                   </a>
                 </li>
-
+                <li>
+                  <a href="{{url('reviews')}}"> <i class="icon-logout"></i>Reviews </a>
+                </li>
 
         
       </nav>

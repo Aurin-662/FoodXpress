@@ -21,15 +21,14 @@
             <button class="sidebar-toggle"><i class="fa fa-long-arrow-left"></i></button>
           </div>
 
-            <!-- Log out               -->
-            <div class="list-inline-item logout">                  
-
-                <form method="POST" action="{{ route('logout') }}" >
-                                @csrf
-                    <input class="btn btn-primary" type="submit" value="Logout">
-
-                </form>
-
+            <div class="d-flex gap-2 align-items-center">
+                <a class="btn btn-outline-light" href="{{ url('/') }}">Back to site</a>
+                <div class="list-inline-item logout">                  
+                    <form method="POST" action="{{ route('logout') }}" >
+                        @csrf
+                        <input class="btn btn-primary" type="submit" value="Logout">
+                    </form>
+                </div>
             </div>
           </div>
         </div>

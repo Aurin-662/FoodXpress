@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Food;
+use App\Models\Review;
 
+use App\Models\Category;
 use App\Models\order;
 use App\Models\Book;
 
@@ -15,22 +17,29 @@ class AdminController extends Controller
 {
     public function add_food()
     {
-        return view('admin.add_food');
+        Category::ensureDefaultCategories();
+        $topCategories = Category::whereNull('parent_id')->with('children')->orderBy('name')->get();
+
+        return view('admin.add_food', compact('topCategories'));
     }
     
     public function upload_food(Request $request)
 {
+    Category::ensureDefaultCategories();
+
     $request->validate([
         'title'   => 'required|string|max:255',
         'details' => 'required|string',
         'price'   => 'required|numeric|min:0',
         'img'     => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        'category_id' => 'required|exists:categories,id',
     ]);
 
     $data = new Food;
     $data->title = $request->title;
     $data->detail = $request->details;
     $data->price = $request->price;
+$data->category_id = $request->category_id;
 
     $image = $request->img;
     $filename = time().'.'.$image->getClientOriginalExtension();
@@ -56,8 +65,11 @@ class AdminController extends Controller
     }
     public function update_food($id)
     {
+        Category::ensureDefaultCategories();
         $food = Food::find($id);
-        return view('admin.update_food', compact('food'));
+        $topCategories = Category::whereNull('parent_id')->with('children')->orderBy('name')->get();
+
+        return view('admin.update_food', compact('food', 'topCategories'));
     }
 
 
@@ -69,12 +81,14 @@ class AdminController extends Controller
         'details' => 'required|string',
         'price'   => 'required|numeric|min:0',
         'image'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        'category_id' => 'nullable|exists:categories,id',
     ]);
 
     $data = Food::find($id);
     $data->title = $request->title;
     $data->detail = $request->details;
     $data->price = $request->price;
+    $data->category_id = $request->category_id;
 
     if ($request->image) {
         $imagename = time().'.'.$request->image->getClientOriginalExtension();
@@ -165,6 +179,51 @@ public function salesReport()
         ->get();
 
     return view('admin.sales_report', compact('bestSelling', 'dailyRevenue', 'customerOrders'));
+}
+
+
+public function reviews()
+{
+    $reviews = Review::with(['food', 'user'])->latest()->get();
+    return view('admin.reviews', compact('reviews'));
+}
+
+public function categories()
+{
+    Category::ensureDefaultCategories();
+    $topCategories = Category::whereNull('parent_id')->with('children')->orderBy('name')->get();
+
+    return view('admin.categories', compact('topCategories'));
+}
+
+public function addCategory(Request $request)
+{
+    Category::ensureDefaultCategories();
+
+    $request->validate([
+        'name'      => 'required|string|max:255',
+        'parent_id' => 'nullable|exists:categories,id',
+    ]);
+
+    Category::create([
+        'name'      => $request->name,
+        'parent_id' => $request->parent_id ?: null,
+    ]);
+
+    return redirect()->back()->with('success', 'Category added successfully!');
+}
+
+public function deleteCategory($id)
+{
+    $category = Category::findOrFail($id);
+
+    if ($category->children()->exists()) {
+        $category->children()->delete();
+    }
+
+    $category->delete();
+
+    return redirect()->back()->with('success', 'Category deleted successfully!');
 }
 
 

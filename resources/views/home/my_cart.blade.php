@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 	@include('home.css')
 <style>
     table{
@@ -146,11 +147,15 @@
             </tr>
 
          @foreach($data as $item)
-            <tr>
+            <tr id="cart-row-{{ $item->id }}">
              
                 <td>{{$item->title}}</td>
-                <td>${{$item->price}}</td>
-                <td>{{$item->quantity}}</td>
+                <td class="cart-price">${{ number_format($item->price, 2) }}</td>
+                <td>
+                    <button class="btn btn-sm btn-secondary qty-btn" data-id="{{ $item->id }}" data-action="decrease">−</button>
+                    <span class="cart-qty" id="qty-{{ $item->id }}">{{ $item->quantity }}</span>
+                    <button class="btn btn-sm btn-secondary qty-btn" data-id="{{ $item->id }}" data-action="increase">+</button>
+                </td>
                 <td>
                     <img width="150" src="{{ asset('food_img/'.$item->image) }}" alt="{{ $item->title }}">
                 </td>
@@ -238,5 +243,38 @@
     
    @include('home.footer')
     @include('home.scripts')
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.qty-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const id = this.dataset.id;
+            const action = this.dataset.action;
+
+            fetch(`/update_cart/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                },
+                body: JSON.stringify({ action: action }),
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById(`qty-${id}`).innerText = data.quantity;
+                    document.querySelector(`#cart-row-${id} .cart-price`).innerText = '$' + data.price;
+                } else if (data.error) {
+                    alert(data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Update cart error:', error);
+                alert('Unable to update cart. Please try again.');
+            });
+        });
+    });
+});
+</script>
 </body>
 </html>

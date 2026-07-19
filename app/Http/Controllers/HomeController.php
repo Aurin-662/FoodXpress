@@ -10,6 +10,7 @@ use App\Models\User;
 
 use App\Models\Food;
 use App\Models\Cart;
+use App\Models\Review;
 use App\Models\order;
 use App\Models\Book;
 
@@ -22,14 +23,44 @@ use Illuminate\Support\Str;
 class HomeController extends Controller
 {
 
-    public function my_home()
-    {
+    public function my_home(Request $request)
+{
+    $categories = \App\Models\Category::all();
 
-        $data = Food::all();    
-        $city = $this->getDeliveryCity(request());
-    
-        return view('home.index', compact('data','city'));
+    \App\Models\Category::ensureDefaultCategories();
+    $topCategories = \App\Models\Category::whereNull('parent_id')->with('children')->orderBy('name')->get();
+
+    $query = Food::query();
+
+    if ($request->filled('category')) {
+        $category = \App\Models\Category::with('children')->find($request->category);
+
+        if ($category) {
+            // If the selected category has children, show foods from the parent and its children.
+            $childIds = $category->children->pluck('id')->toArray();
+            // include the parent category id as well so items assigned to the main category appear
+            $childIds[] = $category->id;
+            $query->whereIn('category_id', $childIds);
+        }
     }
+
+    if ($request->filled('search')) {
+        $query->where('title', 'like', '%' . $request->search . '%');
+    }
+
+    if ($request->filled('min_price')) {
+        $query->where('price', '>=', $request->min_price);
+    }
+
+    if ($request->filled('max_price')) {
+        $query->where('price', '<=', $request->max_price);
+    }
+
+    $data = $query->with('reviews')->get();
+    $city = $this->getDeliveryCity();
+
+    return view('home.index', compact('data', 'city', 'topCategories', 'categories'));
+}
 
 
     public function index()
@@ -39,9 +70,12 @@ class HomeController extends Controller
             $usertype = Auth::user()->usertype;
             if($usertype=='user')
             {
+                \App\Models\Category::ensureDefaultCategories();
+                $topCategories = \App\Models\Category::whereNull('parent_id')->with('children')->orderBy('name')->get();
+
                 $data = Food::all();  
                 $city = $this->getDeliveryCity(request());
-                return view('home.index', compact('data', 'city'));
+                return view('home.index', compact('data', 'city', 'topCategories'));
             }
             else
             {
@@ -104,6 +138,54 @@ class HomeController extends Controller
 
     return view('home.my_cart', compact('data', 'detectedCity'));
 }
+    public function update_cart(Request $request, $id)
+    {
+        $request->validate(['action' => 'required|in:increase,decrease']);
+
+        $cart = Cart::find($id);
+        if (!$cart) {
+            return response()->json(['error' => 'Item not found'], 404);
+        }
+
+        $unitPrice = $cart->price / $cart->quantity;
+
+        if ($request->action === 'increase') {
+            $cart->quantity += 1;
+        } elseif ($request->action === 'decrease' && $cart->quantity > 1) {
+            $cart->quantity -= 1;
+        }
+
+        $cart->price = $unitPrice * $cart->quantity;
+        $cart->save();
+
+        return response()->json([
+            'success'   => true,
+            'quantity'  => $cart->quantity,
+            'price'     => number_format($cart->price, 2),
+            'cart_total'=> number_format(Cart::where('userid', Auth::id())->sum('price'), 2),
+        ]);
+    }
+
+    public function add_review(Request $request, $foodId)
+    {
+        if (!Auth::id()) {
+            return redirect('login');
+        }
+
+        $request->validate([
+            'rating'  => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:500',
+        ]);
+
+        Review::create([
+            'food_id' => $foodId,
+            'user_id' => Auth::id(),
+            'rating'  => $request->rating,
+            'comment' => $request->comment,
+        ]);
+
+        return redirect()->back()->with('success', 'Review submitted!');
+    }
 
     public function remove_cart($id)
     {

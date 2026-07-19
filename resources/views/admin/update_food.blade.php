@@ -60,6 +60,16 @@
                 </div>
 
                 <div class="div_deg">
+                    <label for="">Category</label>
+                    <select name="category_id">
+                        <option value="">Select Category</option>
+                        @foreach($topCategories as $top)
+                            <option value="{{ $top->id }}" {{ $food->category_id == $top->id ? 'selected' : '' }}>{{ $top->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="div_deg">
                     <label for="">Current Image</label>
                     <img src="food_img/{{$food->image}}" alt="" width="150">
                 </div>
