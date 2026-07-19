@@ -1,5 +1,6 @@
 <div id="blog" class="container-fluid bg-dark text-light py-5 text-center wow fadeIn">
-    <h2 class="section-title py-5">Our All Foods</h2>
+<h2 class="section-title py-5">OUR MENU</h2>    
+<h6 class="lead mb-5">Order Your Favorite Foods</h6>
 
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="foods" role="tabpanel" aria-labelledby="pills-home-tab">
@@ -16,15 +17,14 @@
                             <p class="text-white">{{ $data->detail }}</p>
                         </div>
 
-                        <form action="{{url('add_cart', $data->id)}}" method="POST">
-                            @csrf
+<form class="ajax-cart-form" action="{{url('add_cart', $data->id)}}" method="POST">
+    @csrf
+    <input value="1" type="number" min='1' name="qty" required>
+    <button class="btn btn-info" type="submit">Add To Cart</button>
+    <div class="ajax-cart-msg" style="margin-top:8px; font-weight: bold;"></div>
+</form>
 
-                            
 
-                            <input value="1" type="number" min='1' name="qty" required>
-                            <input class="btn btn-info" type="submit" value="Add To Cart">
-
-                        </form>
                         </br></br></br>
 
 

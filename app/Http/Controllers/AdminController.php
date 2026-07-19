@@ -126,5 +126,15 @@ class AdminController extends Controller
         return view('admin.reservation', compact('book'));
     }
 
+    public function dashboard()
+{
+    return view('admin.index', [
+        'total_user'      => \App\Models\User::count(),
+        'total_food'      => Food::count(),
+        'total_order'     => order::count(),
+        'total_delivered' => order::where('delivery_status', 'Delivered')->count(),
+    ]);
+}
+
 
 }

@@ -6,11 +6,11 @@
             </div>
             <div class="col-md-6 px-5 has-height-lg middle-items">
                 <h3>FIND US</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit, laboriosam doloremque odio delectus, sunt magnam laborum impedit molestiae, magni quae ipsum, ullam eos! Alias suscipit impedit et, adipisci illo quam.</p>
+                <p>Visit FoodXpress for a warm dining experience or order online for fast doorstep delivery. We serve fresh pizzas, juicy burgers, and crispy fried chicken made daily with quality ingredients. Whether you're dining in or ordering for delivery, our team is dedicated to serving you great food with a smile.</p>
                 <div class="text-muted">
-                    <p><span class="ti-location-pin pr-3"></span> 12345 Fake ST NoWhere, AB Country</p>
-                    <p><span class="ti-support pr-3"></span> (123) 456-7890</p>
-                    <p><span class="ti-email pr-3"></span>info@website.com</p>
+                    <p><span class="ti-location-pin pr-3"></span> House 12, Road 5, Dhanmondi, Dhaka-1209</p>
+                    <p><span class="ti-support pr-3"></span> +880 1XXX-XXXXXX</p>
+                    <p><span class="ti-email pr-3"></span>contact@foodxpress.com</p>
                 </div>
             </div>
         </div>
@@ -48,7 +48,7 @@
     <script src="assets/vendors/wow/wow.js"></script>
     
     <!-- google maps -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtme10pzgKSPeJVJrG1O3tjR6lk98o4w8&callback=initMap"></script>
-
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_KEY') }}&callback=initMap"></script>
     <!-- FoodHut js -->
     <script src="assets/js/foodhut.js"></script>
+<script src="{{ asset('js/ajax-cart.js') }}"></script>

@@ -23,6 +23,7 @@ Route::middleware(['loggedin'])->group(function () {
 //  Route::post('/confirm_order', [HomeController::class, 'confirm_order']);
     Route::post('/confirm_order', [HomeController::class, 'confirm_order'])
     ->middleware(['loggedin', 'delivery:Dhaka']);
+    Route::get('/my_orders', [HomeController::class, 'my_orders']);
 
 });
 
@@ -40,6 +41,8 @@ Route::middleware(['loggedin', 'admin'])->group(function () {
     Route::get('/delivered/{id}', [AdminController::class, 'delivered']);
     Route::get('/canceled/{id}', [AdminController::class, 'canceled']);
     Route::get('/reservations', [AdminController::class, 'reservations']);
+
+    Route::get('/admin_dashboard', [AdminController::class, 'dashboard']);
 });
 
 Route::middleware([

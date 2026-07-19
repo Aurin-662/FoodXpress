@@ -60,35 +60,39 @@ class HomeController extends Controller
     
     public function add_cart(Request $request, $id)
 {
-    $request->validateWithBag('add_cart', [
+    $request->validate([
         'qty' => 'required|integer|min:1|max:20',
     ]);
 
-    if (Auth::id())
+    if (!Auth::id())
     {
-        $food = Food::find($id);
-
-        $cart_title = $food->title;
-        $cart_details = $food->details;
-        $cart_price = Str::remove('$', $food->price);
-        $cart_image = $food->image;
-
-        $data = new Cart;
-        $data->title = $cart_title;
-        $data->details = $cart_details;
-        $data->price = $cart_price * $request->qty;
-        $data->image = $cart_image;
-        $data->quantity = $request->qty;
-        $data->userid = Auth::user()->id;
-
-        $data->save();
-
-        return redirect()->back()->with('success', 'Added to cart!');
-    }
-    else
-    {
+        if ($request->ajax()) {
+            return response()->json(['error' => 'Please login first.'], 401);
+        }
         return redirect('login');
     }
+
+    $food = Food::find($id);
+
+    $cart_title = $food->title;
+    $cart_details = $food->details;
+    $cart_price = Str::remove('$', $food->price);
+    $cart_image = $food->image;
+
+    $data = new Cart;
+    $data->title = $cart_title;
+    $data->details = $cart_details;
+    $data->price = $cart_price * $request->qty;
+    $data->image = $cart_image;
+    $data->quantity = $request->qty;
+    $data->userid = Auth()->user()->id;
+    $data->save();
+
+    if ($request->ajax()) {
+        return response()->json(['success' => true, 'message' => 'Added to cart!']);
+    }
+
+    return redirect()->back()->with('success', 'Added to cart!');
 }
 
 
@@ -132,6 +136,8 @@ class HomeController extends Controller
             $Order->email = $request->email;
             $Order->phone = $request->phone;
             $Order->address = $request->address;
+
+            $Order->user_id = Auth::id();
 
             $Order->title = $cart->title;
             $Order->quantity = $cart->quantity;
@@ -190,6 +196,12 @@ class HomeController extends Controller
     } catch (\Exception $e) {
         return null;
     }
+}
+
+public function my_orders()
+{
+    $orders = order::where('user_id', Auth::id())->latest()->get();
+    return view('home.my_orders', compact('orders'));
 }
 
 

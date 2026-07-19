@@ -76,6 +76,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('my_cart') }}">Cart</a>
                 </li>
+                
+                
+
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('my_orders') }}">My Orders</a>
+                </li>
+
+
+
 
                 <form action="{{ route('logout') }}" method="POST">
                        @csrf
@@ -118,6 +128,7 @@
 
 
         @if($data->count() > 0)
+        </br> </br> </br> 
         <table>
             <tr>
 
