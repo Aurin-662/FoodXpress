@@ -2,19 +2,30 @@
 // smooth scroll
 $(document).ready(function(){
     $(".navbar .nav-link").on('click', function(event) {
+        var href = $(this).attr('href') || '';
 
-        if (this.hash !== "") {
+        if (!href.includes('#')) {
+            return;
+        }
 
-            event.preventDefault();
+        var url = new URL(href, window.location.href);
 
-            var hash = this.hash;
+        if (url.pathname !== window.location.pathname) {
+            return;
+        }
 
-            $('html, body').animate({
-                scrollTop: $(hash).offset().top
-            }, 700, function(){
-                window.location.hash = hash;
-            });
-        } 
+        var target = document.querySelector(url.hash);
+        if (!target) {
+            return;
+        }
+
+        event.preventDefault();
+
+        $('html, body').animate({
+            scrollTop: $(target).offset().top - 90
+        }, 700, function(){
+            window.location.hash = url.hash;
+        });
     });
 });
 

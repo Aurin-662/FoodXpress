@@ -35,7 +35,13 @@
         padding: 20px;
     }
 
+    html {
+        scroll-behavior: smooth;
+    }
 
+    [id] {
+        scroll-margin-top: 90px;
+    }
 
 </style>
 
@@ -49,25 +55,25 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#home">Home</a>
+                    <a class="nav-link" href="{{ url('/') }}#home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#about">About</a>
+                    <a class="nav-link" href="{{ url('/') }}#about">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#gallary">Gallary</a>
+                    <a class="nav-link" href="{{ url('/') }}#gallary">Gallery</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#book-table">Book-Table</a>
+                    <a class="nav-link" href="{{ url('/') }}#book-table">Book Table</a>
                 </li>
             </ul>
             <a class="navbar-brand m-auto" href="{{ url('/') }}">
-                <img src="assets/imgs/logo.svg" class="brand-img" alt="">
+                <img src="{{ asset('assets/imgs/logo.svg') }}" class="brand-img" alt="">
                 <span class="brand-txt">Food Hut</span>
             </a>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#blog">Blog<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{{ url('/') }}#blog">Menu<span class="sr-only">(current)</span></a>
                 </li>
 
                 @if (Route::has('login'))
@@ -146,7 +152,7 @@
                 <td>${{$item->price}}</td>
                 <td>{{$item->quantity}}</td>
                 <td>
-                    <img width="150" src="food_img/{{$item->image}}" alt="">
+                    <img width="150" src="{{ asset('food_img/'.$item->image) }}" alt="{{ $item->title }}">
                 </td>
                 <td>
                     <a class="btn btn-danger" onclick="return confirm('Are you sure to remove this item from cart?')" href="{{ url('remove_cart', $item->id) }}">Delete</a>
@@ -155,15 +161,14 @@
         @endforeach
 
         </table>
-        <h3><b>Total Price: ${{ $data->sum('price') }}</b></h3>
-        
+        <div class="text-center mb-4">
+            <h3><strong>Total Price: ${{ $data->sum('price') }}</strong></h3>
+        </div>
         @else
-        <h2 style="color: white; padding: 40px;">Your cart is empty!</h2>
+            <div class="alert alert-secondary">Your cart is empty! Add items from the menu to continue.</div>
         @endif
 
-    </div>
-
-
+        </div>
     </div>
 
     <div class="div_center">
@@ -205,7 +210,7 @@
 
         <div class="div_deg">
             <label for="">Delivery City</label>
-            <select name="delivery_city" required style="padding:8px; border-radius:5px; width: 250px;">
+            <select name="delivery_city" style="padding:8px; border-radius:5px; width: 250px;">
                 <option value="">-- Select city --</option>
                 @foreach(['Dhaka','Chittagong','Khulna','Rajshahi','Sylhet','Barisal','Rangpur','Mymensingh'] as $cityOption)
                     <option value="{{ $cityOption }}" {{ old('delivery_city', $detectedCity) == $cityOption ? 'selected' : '' }}>
@@ -229,10 +234,9 @@
 
 
         </form>
-
-
-
     </div>
     
+   @include('home.footer')
+    @include('home.scripts')
 </body>
 </html>

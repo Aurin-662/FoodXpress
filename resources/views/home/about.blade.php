@@ -1,4 +1,4 @@
-<div id="about" class="container-fluid wow fadeIn" id="about"data-wow-duration="1.5s">
+<div id="about" class="container-fluid wow fadeIn" data-wow-duration="1.5s">
         <div class="row">
             <div class="col-lg-6 has-img-bg"></div>
             <div class="col-lg-6">

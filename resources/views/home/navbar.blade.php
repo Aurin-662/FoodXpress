@@ -7,23 +7,22 @@
         <ul class="navbar-nav">
             <li class="nav-item"><a class="nav-link" href="{{ url('/') }}#home">Home</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url('/') }}#about">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url('/') }}#gallary">Gallary</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url('/') }}#book-table">Book-Table</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url('/') }}#gallary">Gallery</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url('/') }}#book-table">Book Table</a></li>
         </ul>
         <a class="navbar-brand m-auto" href="{{ url('/') }}">
-            <img src="assets/imgs/logo.svg" class="brand-img" alt="">
-            <span class="brand-txt">Food Hut</span>
+            <img src="{{ asset('assets/imgs/logo.svg') }}" class="brand-img" alt="FoodXpress logo">
+            <span class="brand-txt">FoodXpress</span>
         </a>
         <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="{{ url('/') }}#blog">Food</a></li>
-
+            <li class="nav-item"><a class="nav-link" href="{{ url('/') }}#blog">Menu</a></li>
             @if (Route::has('login'))
                 @auth
                     <li class="nav-item"><a class="nav-link" href="{{ url('my_cart') }}">Cart</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url('my_orders') }}">My Orders</a></li>
-                    <form action="{{ route('logout') }}" method="POST">
+                    <form action="{{ route('logout') }}" method="POST" class="form-inline ml-xl-4">
                         @csrf
-                        <input class="btn btn-primary ml-xl-4" type="submit" value="Logout">
+                        <input class="btn btn-primary" type="submit" value="Logout">
                     </form>
                 @else
                     <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>

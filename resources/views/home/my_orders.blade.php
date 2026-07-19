@@ -24,7 +24,7 @@
             @foreach($orders as $order)
             <div class="col-md-8 mb-3">
                 <div class="d-flex align-items-center justify-content-between p-3" style="background:#2a2a2a; border-radius:8px;">
-                    <img width="70" src="food_img/{{ $order->image }}" alt="{{ $order->title }}" style="border-radius:6px;">
+                    <img width="70" src="{{ asset('food_img/'.$order->image) }}" alt="{{ $order->title }}" style="border-radius:6px;">
                     <div class="flex-grow-1 px-3 text-left">
                         <h5 class="mb-1">{{ $order->title }}</h5>
                         <small>Qty: {{ $order->quantity }} &nbsp;|&nbsp; ${{ $order->price }}</small><br>
@@ -42,6 +42,6 @@
         @endif
     </div>
 
-   
+    @include('home.footer')
 </body>
 </html>

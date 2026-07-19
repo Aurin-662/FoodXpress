@@ -75,7 +75,7 @@ class HomeController extends Controller
     $food = Food::find($id);
 
     $cart_title = $food->title;
-    $cart_details = $food->details;
+    $cart_details = $food->detail;
     $cart_price = Str::remove('$', $food->price);
     $cart_image = $food->image;
 
