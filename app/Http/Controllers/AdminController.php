@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
+
 use App\Models\Food;
 
 use App\Models\order;
@@ -134,6 +136,35 @@ class AdminController extends Controller
         'total_order'     => order::count(),
         'total_delivered' => order::where('delivery_status', 'Delivered')->count(),
     ]);
+}
+
+
+
+public function salesReport()
+{
+    // Aggregation + GROUP BY -> best selling food items
+    $bestSelling = order::select('title')
+        ->selectRaw('SUM(quantity) as total_qty')
+        ->selectRaw('SUM(price) as total_revenue')
+        ->groupBy('title')
+        ->orderByDesc('total_qty')
+        ->get();
+
+    // Aggregation by date -> daily revenue
+    $dailyRevenue = order::selectRaw('DATE(created_at) as order_date')
+        ->selectRaw('SUM(price) as total')
+        ->groupBy('order_date')
+        ->orderByDesc('order_date')
+        ->get();
+
+    // JOIN -> orders with the customer who placed them (orders.user_id -> users.id)
+    $customerOrders = DB::table('orders')
+        ->join('users', 'orders.user_id', '=', 'users.id')
+        ->select('users.name', 'users.email', 'orders.title', 'orders.price', 'orders.delivery_status', 'orders.created_at')
+        ->orderByDesc('orders.created_at')
+        ->get();
+
+    return view('admin.sales_report', compact('bestSelling', 'dailyRevenue', 'customerOrders'));
 }
 
 

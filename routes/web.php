@@ -43,6 +43,8 @@ Route::middleware(['loggedin', 'admin'])->group(function () {
     Route::get('/reservations', [AdminController::class, 'reservations']);
 
     Route::get('/admin_dashboard', [AdminController::class, 'dashboard']);
+
+    Route::get('/sales_report', [AdminController::class, 'salesReport']);
 });
 
 Route::middleware([

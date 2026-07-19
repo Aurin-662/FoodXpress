@@ -12,6 +12,8 @@
         <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
         <ul class="list-unstyled">
                 <li class="active"><a href="{{url('home')}}"> <i class="icon-home"></i>Home </a></li>
+                <li><a href="{{ url('sales_report') }}"><i 
+                  class="icon-logout"></i>Sales Report</a></li>
                 
                 <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-windows"></i>Food </a>
                   <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
